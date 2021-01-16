@@ -26,25 +26,3 @@ def add_user(connection,userid,password,permission):
     with connection:
         connection.execute(INSERT_USER,(userid,password,permission,))
 
-
-
-# def main():
-#
-#
-#     user_id ='barak'
-#     password=123
-#     permission=0
-#
-#     con = connect()
-#     create_table(con)
-#
-#     add_user(con,user_id,password,permission)
-#     an2=get_all_users(con)
-#     print(an2)
-#
-#
-#
-#
-# if __name__ == "__main__":
-#     main()
-

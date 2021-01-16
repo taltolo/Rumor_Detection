@@ -58,24 +58,3 @@ def get_model_name(connection):
     with connection:
         return connection.execute(GET_ALL_MODEL_NAME).fetchall()
 
-
-# def main():
-#
-#
-#
-#     con = connect()
-#     con.execute("DELETE FROM analyze_results WHERE  model_name='model_32_2' ")
-#     # create_table(con)
-#     # add_results(con, user_id, twitter_user_name, amount_tweets, avg, model_name, x)
-#     an2=get_all_results(con)
-#     print(an2)
-#     anl=get_results_by_id(con, 'tal')
-#     print(anl)
-#     # model=get_model_name(con)
-#     # print("********"+str(model))
-
-
-
-# if __name__ == "__main__":
-#     main()
-

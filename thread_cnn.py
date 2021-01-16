@@ -10,12 +10,12 @@ from tweets_service import tweets_service
 class thread_cnn_model(QThread):
     commit=pyqtSignal()
 
-    def __init__(self,embedding_dim=400,max_sequence_length=150,optimizer='AdaGrad',epochs=10, batch_size=10,filters_number=250,model_name='default_model'):
+    def __init__(self,embedding_dim=400,max_sequence_length=150,optimizer='AdaGrad',epochs=10, batch_size=10,filters_number=250,model_name='AdaGrad_model'):
         QThread.__init__(self)
         self.cnn=cnn_rumor_detection(embedding_dim,max_sequence_length,optimizer,epochs,batch_size,filters_number,model_name)
 
     def run(self):
-        self.cnn.pre_processing_data_set()
+        self.cnn.pre_processing_dataset()
         self.commit.emit()
 
 class thread_cnn_analyze(QThread):

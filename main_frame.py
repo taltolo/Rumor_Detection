@@ -1,10 +1,9 @@
 import pickle
 import pyqtgraph as pg
 from PyQt5.QtGui import QMovie
-from PyQt5.QtWidgets import QProgressBar, QVBoxLayout, QMessageBox, QTableWidgetItem, QPushButton
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem, QPushButton
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
-import tweets_service
 from thread_cnn import thread_cnn_model
 from thread_cnn import thread_cnn_analyze
 from thread_cnn import thread_cnn_twiteer
@@ -332,31 +331,22 @@ class Ui_MainWindow_main_frame(object):
 
 
     def buildspiner_uploadtweets(self):
-        """
-        creating build model gif and configure settings
-        """
-        self.label_load_gif = QtWidgets.QLabel(self.frame_Classifcation)
-        self.build_label = QtWidgets.QLabel(self.frame_Classifcation)
-        self.build_label.setGeometry(400, 90, 121, 31)
-        self.build_label.setStyleSheet("font: 25 14pt \"Calibri \"background-color:#F5F5F5;")
-        self.build_label.setText("Loading tweets...")
-        self.build_label.setVisible(True)
-        self.label_load_gif.setGeometry(440, 120, 50, 50)
-        self.animation_load = QMovie("photos\\black_loading.gif")
-        self.label_load_gif.setMovie(self.animation_load)
-        self.animation_load.start()
-        self.label_load_gif.setVisible(True)
-        # self.logout_but.setEnabled(False)
-        # self.runanalyze_but.setEnabled(False)
-        # self.classifcation_btn.setEnabled(False)
-        # self.result_btn.setEnabled(False)
-        # self.modelSetting_bnt.setEnabled(False)
-        # self.upload_but.setEnabled(False)
+        self.label_gif = QtWidgets.QLabel(self.frame_Classifcation)
+        self.label_for_gif = QtWidgets.QLabel(self.frame_Classifcation)
+        self.label_for_gif.setGeometry(400, 90, 121, 31)
+        self.label_for_gif.setStyleSheet("font: 25 14pt \"Calibri \"background-color:#F5F5F5;")
+        self.label_for_gif.setText("Loading tweets...")
+        self.label_for_gif.setVisible(True)
+        self.label_gif.setGeometry(440, 120, 50, 50)
+        self.animation_gif = QMovie("photos\\black_loading.gif")
+        self.label_gif.setMovie(self.animation_gif)
+        self.animation_gif.start()
+        self.label_gif.setVisible(True)
 
 
     def treahFinished_loadingModel(self):
-        self.build_label.setVisible(False)
-        self.label_load_gif.setVisible(False)
+        self.label_for_gif.setVisible(False)
+        self.label_gif.setVisible(False)
         self.logout_but.setEnabled(True)
         self.runanalyze_but.setEnabled(True)
         self.classifcation_btn.setEnabled(True)
@@ -426,15 +416,11 @@ class Ui_MainWindow_main_frame(object):
             else:
                 colors.append('#FF3333')
 
-        # plotting a bar chart
         plt.bar(left, height, tick_label=tick_label,
                 width=0.7, color=colors)
 
-        # naming the x-axis
         plt.xlabel('tweets')
-        # naming the y-axis
         plt.ylabel('percentage %')
-        # plot title
         plt.title('Analyze result for - '+str(self.lineEdit_twitterUserName.text()))
         modelTemp=str(self.comboBox_model.currentText())
         amountTemp=int(self.lineEdit_amountofTweet.text())
@@ -443,17 +429,10 @@ class Ui_MainWindow_main_frame(object):
         self.lineEdit_twitterUserName.clear()
         self.lineEdit_amountofTweet.clear()
         self.plainTextEdit_tweetToTest.clear()
-        # function to show the plot
         plt.show()
 
 
     def upload_tweet(self):
-        """
-             export tweet from twitter by using tweepy API
-             according to the user name from the user request
-             and display the tweet in planText
-
-        """
         self.testname = str(self.lineEdit_twitterUserName.text())
         self.amountOfTweet=str(self.lineEdit_amountofTweet.text())
         if self.amountOfTweet=='' and self.testname=="":
@@ -501,16 +480,14 @@ class Ui_MainWindow_main_frame(object):
 
 
     def treahFinished_extract_tweet(self,list_tweet):
-        self.build_label.setVisible(False)
-        self.label_load_gif.setVisible(False)
+        self.label_for_gif.setVisible(False)
+        self.label_gif.setVisible(False)
         self.list_tweet_from_twitter=list_tweet
         self.lineEdit_twitterUserName.setEnabled(True)
         self.lineEdit_amountofTweet.setEnabled(True)
         self.comboBox_model.setEnabled(True)
         self.upload_but.setEnabled(True)
         self.plainTextEdit_tweetToTest.clear()
-
-
         if self.list_tweet_from_twitter[0]==-1:
             self.Warning_QMessageBox_classifcation("User dose not exist")
             self.lineEdit_twitterUserName.clear()
@@ -977,8 +954,8 @@ class Ui_MainWindow_main_frame(object):
         self.gridWidget_graph.setVisible(True)
         self.insert_hyperparameters_DB(self.new_modelName, self.new_numberfeaturemaps, self.new_optimizer,
                                        self.new_numberofepoch, self.new_batch_size)
-        self.build_label.setVisible(False)
-        self.label_load_gif.setVisible(False)
+        self.label_for_gif.setVisible(False)
+        self.label_gif.setVisible(False)
         self.Information_QMessageBox_settings('A new model was successfully built')
         self.logout_but.setEnabled(True)
         self.view_models_but.setEnabled(True)
@@ -1036,22 +1013,6 @@ class Ui_MainWindow_main_frame(object):
         self.graphWidget.plotItem.getAxis('bottom').setPen(pg.mkPen(color=(0, 0, 0), width=1))
         self.gridLayout.addWidget(self.graphWidget, 2, 1)
         self.graphWidget.addLegend()
-        # dict_history=pickle.load(open('models/history'+self.new_modelName+'.pkl', 'rb'))
-        # temp_val_loss,temp_loss,temp_acc,temp_acc_val,list_amount=[],[],[],[],[]
-        # train_loss=list(dict_history['train_loss'])
-        # train_val_loss=list(dict_history['train_val_loss'])
-        # train_acc=list(dict_history['train_acc'])
-        # train_acc_val=list(dict_history['train_val_acc'])
-        # for i in train_loss:
-        #     temp_loss.append(i)
-        # for i in train_val_loss:
-        #     temp_val_loss.append(i)
-        # for i in train_acc:
-        #     temp_acc.append(i)
-        # for i in train_acc_val:
-        #     temp_acc_val.append(i)
-        # for i in range(len(temp_loss)):
-        #     list_amount.append(i+1)
         if self.FLAG_GRAPH=="train loss":
             self.graphWidget.plot(self.list_amount, self.temp_loss, name="train " + self.name_to_graph,
                                   pen=pg.mkPen(color=(0, 0, 255), symbol='+', symbolSize=30, symbolBrush=('b'),
@@ -1076,21 +1037,18 @@ class Ui_MainWindow_main_frame(object):
 
 
     def buildspiner_buildingNewModel(self):
-        """
-        creating build model gif and configure settings
-        """
-        self.label_load_gif = QtWidgets.QLabel(self.frame_model_setting)
-        self.build_label = QtWidgets.QLabel(self.frame_model_setting)
-        self.build_label.setGeometry(620, 70, 250, 75)
-        self.build_label.setStyleSheet("font: 25 14pt \"Calibri \"background-color:#F5F5F5;")
-        self.build_label.setText("building New model...")
-        self.build_label.setVisible(True)
-        self.label_load_gif.setGeometry(600, 120, 250, 200)
-        self.animation_load = QMovie("photos\\blue_spiner3.gif")
-        self.label_load_gif.setMovie(self.animation_load)
-        self.animation_load.start()
+        self.label_gif = QtWidgets.QLabel(self.frame_model_setting)
+        self.label_for_gif = QtWidgets.QLabel(self.frame_model_setting)
+        self.label_for_gif.setGeometry(620, 70, 250, 75)
+        self.label_for_gif.setStyleSheet("font: 25 14pt \"Calibri \"background-color:#F5F5F5;")
+        self.label_for_gif.setText("building New model...")
+        self.label_for_gif.setVisible(True)
+        self.label_gif.setGeometry(600, 120, 250, 200)
+        self.animation_gif = QMovie("photos\\blue_spiner3.gif")
+        self.label_gif.setMovie(self.animation_gif)
+        self.animation_gif.start()
         self.view_models_but.setEnabled(False)
-        self.label_load_gif.setVisible(True)
+        self.label_gif.setVisible(True)
         self.lineEdit_modelName.setEnabled(False)
         self.lineEdit_batch_size.setEnabled(False)
         self.lineEdit_numberofepoch.setEnabled(False)
@@ -1243,18 +1201,11 @@ class Ui_MainWindow_main_frame(object):
                 colors.append('lightgreen')
             else:
                 colors.append('#FF3333')
-
-        # plotting a bar chart
         plt.bar(left, height, tick_label=tick_label,
                 width=0.7, color=colors)
-
-        # naming the x-axis
         plt.xlabel('tweets')
-        # naming the y-axis
         plt.ylabel('percentage %')
-        # plot title
         plt.title('Analyze result for - '+str(self.dict_result["user_name"][row]))
-        # function to show the plot
         plt.show()
 
 

@@ -44,29 +44,3 @@ def delete_model_by_model_name(connection,model_name):
     with connection:
         connection.execute(DELETE_BY_NAME_MODEL,(model_name,))
 
-# def main():
-#
-#
-#     model_name='default_model'
-#     filters_number=250
-#     optimizer='Adam'
-#     epochs=10
-#     batch_size=10
-#
-#
-#     con = connect()
-    # con.execute(DELETE_TABLE)
-    #
-    # create_table(con)
-    # add_hyperparameters(con, model_name, filters_number, optimizer, epochs, batch_size)
-    # hyp=get_model_name(con)
-    # print(hyp)
-    # hyp2=get_hyperparameters_by_model(con, model_name)
-    # print(hyp2)
-    # model=get_model_name(con)
-    # print("********"+str(model))
-
-#
-#
-# if __name__ == "__main__":
-#     main()
